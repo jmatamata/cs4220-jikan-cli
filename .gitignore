@@ -1,4 +1,6 @@
-node_modules/
+jikan-app/package-lock.json
+jikan-module/package-lock.json
+jikan-app/node_modules/
+jikan-module/node_modules/
 
-history.json
-package-lock.json
+jikan-app/config.json

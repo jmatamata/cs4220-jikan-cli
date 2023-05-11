@@ -5,16 +5,9 @@ const base = 'https://api.jikan.moe/v4/';
 // We can also add &sfw at the end, assuming this filters possible nsfw content tagged 18+ in the db 
 // search for anime by name
 const findAnimeLike = async (searchTerm) => {
-    try{
+    try {
         const searchURL = `${base}anime?q=${searchTerm}&sfw`;
         const res = await superagent.get(searchURL);
-
-        //console.log(res.body);
-        //console.log(res.body.pagination.items.count);
-        if(res.body.pagination.items.count < 1){
-            console.log(`${searchTerm} was not found in the data base. Please try again with a new search term.`);
-            return null;
-        }
 
         return res.body;
     } catch (error) {

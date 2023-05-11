@@ -1,0 +1,15 @@
+{
+    "name": "jikan-module",
+    "version": "1.0.0",
+    "description": "a module to interact with jikan api",
+    "main": "api.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Joseph Comeaux, Jorge Mata, Ethan Ngo",
+    "license": "ISC",
+    "dependencies": {
+      "superagent": "^8.0.9"
+    }
+  }
+  
