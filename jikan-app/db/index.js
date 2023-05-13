@@ -43,15 +43,15 @@ const mongo = () => {
     /**
      * @description                      performs a query on a mongo collection by deckId
      * @param {String} collectionName    name of a collection in mongo
-     * @param {Object} deckIdentifier    deckId to query
-     * @return {Object or Array}         the card object by deck id or all results
+     * @param {Object} searchTermIn      searchTerm to query
+     * @return {Object or Array}         the anime object by searchTerm or all results
      */
-    async function find(collectionName, deckIdentifier) {
+    async function find(collectionName, searchTermIn) {
         try {
             const collection = db.collection(collectionName);
 
-            if (deckIdentifier) {
-                return await collection.find({ deckId: deckIdentifier }).next();
+            if (searchTermIn) {
+                return await collection.find({ searchTerm: searchTermIn }).next();
             } else {
                 return await collection.find({}).toArray();
             }
@@ -60,21 +60,19 @@ const mongo = () => {
         }
     }
 
-    /**
-     * @description                      performs an update on a mongo collection by deckId
+     /**
+     * @description                      performs an update on a mongo collection by mal_id
      * @param {String} collectionName    name of a collection in mongo
-     * @param {Object} deckIdentifier    deckId to query
+     * @param {Object} idIn              mal_id to query
      * @param {Object} data              data to update into mongo collection
      */
-    async function update(collectionName, deckIdentifier, data) {
+     async function update(collectionName, idIn, data) {
         try {
-            // NOT THE SOLUTION TO HOMEWORK #2
-            // HOMEWORK #2 REQUIRES WORKING WITH fs and not MongoDB
             const collection = db.collection(collectionName);
 
             await collection.updateOne(
-                { deckId: deckIdentifier },
-                { $set: data }
+                { id: idIn },
+                { $set: data },
             );
         } catch (error) {
             console.log(error);
