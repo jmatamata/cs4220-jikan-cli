@@ -11,7 +11,7 @@ const jikan = require('jikan-module');
 const _formatAnimes = (animeList) => {
     return animeList.map((anime) => {
         return {
-            display: `${anime.title} (${anime.aired.from}-${anime.aired.to})`,
+            display: `${anime.title} | ${anime.episodes ? anime.episodes : 0} episodes`,
             id: anime.mal_id
         };
     });
@@ -34,7 +34,11 @@ router.get('/', async (req, res) => {
 
         res.json(searchOutput);
 
-        database.save('History', { ...searchOutput });
+        database.save('History', { 
+            searchTerm: searchOutput.searchTerm,
+            searchCount: animeList.length,
+            lastSearched: new Date()
+         });
     } catch (error) {
         res.status(500).json(error.toString());
     }
