@@ -34,7 +34,17 @@ const mongo = () => {
     async function save(collectionName, data) {
         try {
             const collection = db.collection(collectionName);
-            await collection.insertOne(data);
+            const prevCheck = await collection.countDocuments({searchTerm: data.searchTerm})
+            //checks if term is in collection and updates time, else inserts it.
+            if(prevCheck >= 1){
+                console.log('The thing exists already! Update date')
+                collection.findOneAndUpdate(
+                    { searchTerm : data.searchTerm},
+                    { $set : { lastSearched : new Date() }}
+                );
+            }else{
+               await collection.insertOne(data); 
+            }
         } catch (error) {
             console.log(error);
         }

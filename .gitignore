@@ -2,5 +2,7 @@ jikan-app/package-lock.json
 jikan-module/package-lock.json
 jikan-app/node_modules/
 jikan-module/node_modules/
+node_modules/
 
+package-lock.json
 jikan-app/config.json
