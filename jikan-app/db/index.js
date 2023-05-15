@@ -37,7 +37,7 @@ const mongo = () => {
             const prevCheck = await collection.countDocuments({searchTerm: data.searchTerm})
             //checks if term is in collection and updates time, else inserts it.
             if(prevCheck >= 1){
-                console.log('The thing exists already! Update date')
+                //console.log('The thing exists already! Update date')
                 collection.findOneAndUpdate(
                     { searchTerm : data.searchTerm},
                     { $set : { lastSearched : new Date() }}
@@ -79,11 +79,29 @@ const mongo = () => {
      async function update(collectionName, idIn, data) {
         try {
             const collection = db.collection(collectionName);
+            const anime = await collection.find({searchTerm : data.searchTerm}).toArray();
+            //console.log(anime[0].hasOwnProperty('selections'));
+            //console.log(data.searchTerm);
 
-            await collection.updateOne(
-                { id: idIn },
-                { $set: data },
-            );
+            if(!anime[0].hasOwnProperty('selections')){
+                //console.log('no selections found! Adding it now');
+                await collection.updateOne(
+                    { searchTerm: data.searchTerm },
+                    { $set : { 'selections' : 
+                            [ { idIn , Display : `${data.title} | ${data.year} | ${data.episodes ? data.episodes : 0} episodes` } ] } }
+                );
+            } else {
+                //console.log('Selections was found, appending to it now.');
+                selections = anime[0].selections;
+                //console.log('before',selections);
+                selections.push({ idIn , Display : `${data.title} | ${data.year} | ${data.episodes ? data.episodes : 0} episodes` })
+                //console.log('after',selections);
+
+                await collection.updateOne(
+                    { searchTerm: data.searchTerm },
+                    { $set : { 'selections' : selections } }
+                ); 
+            }
         } catch (error) {
             console.log(error);
         }

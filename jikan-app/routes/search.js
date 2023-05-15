@@ -44,6 +44,10 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+//The method below shall return info on the anime searched, and also add to the database 
+//a new selections array with each anime they searched for using this.
+
 /**
  * @api {GET} /search/{id}/details        search for anime with the ID
  * @apiQuery {Int} searched               query to use for jikan
@@ -54,8 +58,8 @@ router.get('/:id/details', async (req, res) => {
         const { query } = req;
         const { searchterm } = query;   
         const id = req.params.id; // searches from :id
-        console.log(id);
-        console.log(searchterm);
+        //console.log(id);
+        //console.log(searchterm);
 
         const jikanRaw = await jikan.findAnimeByID(id);
 
@@ -64,20 +68,23 @@ router.get('/:id/details', async (req, res) => {
             genres.push(genre.name);
         });
 
-        res.json({
+        //console.log(jikanRaw.data);
+        database.update('History', id, { 
+            searchTerm : searchterm,
+            title : jikanRaw.data.title,
+            year : jikanRaw.data.year,
+            episodes : jikanRaw.data.episodes
+         });
+
+         res.json({
             URL : jikanRaw.data.url,
             Title : jikanRaw.data.title,
+            Year : jikanRaw.data.year,
             'User Score' : jikanRaw.data.score,
-            'English Title' : jikanRaw.title_english,
+            'English Title' : jikanRaw.data.title_english,
             Synopsis : jikanRaw.data.synopsis,
             genres
         });
-
-        // database.save('History', { 
-        //     searchTerm: searchOutput.searchTerm,
-        //     searchCount: animeList.length,
-        //     lastSearched: new Date()
-        //  });
     } catch (error) {
         res.status(500).json(error.toString());
     }
