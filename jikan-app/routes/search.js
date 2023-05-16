@@ -4,7 +4,7 @@ const database = require('../db');
 const jikan = require('jikan-module');
 
 /**
- * @description                 format the card array response
+ * @description                 format the anime array response
  * @param {Array} animeList     array of animes
  * @return {Array}              array of anime objects with formatted output for final
  */
